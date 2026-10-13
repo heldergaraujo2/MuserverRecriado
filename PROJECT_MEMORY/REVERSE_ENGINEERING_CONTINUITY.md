@@ -9,7 +9,7 @@ Analisar estaticamente o GameServer com Ghidra, documentar comportamento e depen
 ## Regras de trabalho
 
 - Trabalhar um comando PowerShell por vez e aguardar a saída antes de enviar o próximo.
-- Após cada resultado confirmado, atualizar este documento no repositório held ergaraujo2/MuserverRecriado e registrar o que mudou.
+- Após cada resultado confirmado, atualizar este documento no repositório heldergaraujo2/MuserverRecriado e registrar o que mudou.
 - Não executar o GameServer original. O trabalho atual é de análise estática.
 - Não apagar, mover ou sobrescrever o projeto Ghidra antigo.
 - Preservar os binários originais; não alterar arquivos-alvo durante a análise.
