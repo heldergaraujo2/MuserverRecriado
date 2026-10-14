@@ -215,6 +215,8 @@ O usuário compartilhou o resumo do lote executado em 2026-10-14 às 16:22:40 -0
 4. Continuar a fila das funções internas do ConnectServer sem ignorar nomes como `Catch_All@...` ou outras entradas que não correspondam ao padrão `FUN_...`.
 5. Não iniciar outro processamento REA/Ghidra concorrente se houver algum processo de análise ativo.
 
+**Validação dos nove sucessos (2026-10-14, saída PowerShell fornecida pelo usuário):** foram verificados `FUN_004011a0`, `FUN_004014a0`, `FUN_00401520`, `FUN_00401620`, `FUN_00401660`, `FUN_00401720`, `FUN_004017f0`, `FUN_00401810` e `FUN_00401890`. Os nove arquivos `.json.txt` são JSON válido e desserializam para strings; os nove arquivos `.c.txt` existem e não estão vazios. Contagem: 9/9 JSON válido, 9/9 fontes não vazias, 0 pendências nessa validação. Isso valida a presença/estrutura básica dos artefatos, não a correção semântica do pseudocódigo nem, isoladamente, a integridade de todos os logs.
+
 ## 9. Plano de lotes para o MuServer inteiro
 
 1. **Lote 0 — auditoria/preparação:** verificar versões, inventário, hashes, status dos processos e evidências existentes; não sobrescrever.
@@ -266,7 +268,7 @@ O lote-piloto ConnectServer de 2026-10-14 terminou segundo o resumo fornecido: 1
 - `D:\REA\pacote_muserver\ConnectServer\RESUMO_LOTE_20261014_161609.md`
 - log/erro específico de `FUN_004017c0` dentro de `D:\REA\pacote_muserver\ConnectServer\diagnostico`.
 
-Pedir ao usuário para executar um comando PowerShell que localize e mostre o log de `FUN_004017c0` e as linhas pertinentes do CSV; não repetir a decompilação dessa função antes de compreender o erro. Depois validar os artefatos dos nove sucessos e reconciliar o CSV de resultados com o inventário completo. Em seguida, criar/rodar um lote sequencial retomável para as funções restantes do ConnectServer, incluindo a classificação de entradas não `FUN_...`, antes de avançar aos próximos binários na fila global.
+Pedir ao usuário para executar um comando PowerShell que localize e mostre o log de `FUN_004017c0` e as linhas pertinentes do CSV; não repetir a decompilação dessa função antes de compreender o erro. A validação dos nove sucessos foi concluída: os nove JSONs são válidos e os nove pseudocódigos existem e não estão vazios; nenhuma pendência nessa checagem. Próximo: reconciliar o CSV de resultados com o inventário completo e verificar os logs associados sem reprocessar funções concluídas. Em seguida, criar/rodar um lote sequencial retomável para as funções restantes do ConnectServer, incluindo a classificação de entradas não `FUN_...`, antes de avançar aos próximos binários na fila global.
 
 ## 13. Histórico anterior do Ghidra (preservado)
 
