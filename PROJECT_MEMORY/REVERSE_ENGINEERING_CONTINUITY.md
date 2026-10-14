@@ -584,3 +584,16 @@ Saída fornecida pelo usuário para o arquivo `Data/Custom/CustomMove.txt`:
 - A busca sem distinção entre maiúsculas/minúsculas por `/quest`, `/control`, `/zen`, `/enterarena` e `/testando` não encontrou correspondências nesse arquivo.
 - Conclusão limitada: `/quest`, `/zen` e `/enterarena` aparecem em `Command.txt` conforme a seção 32; `/control` não apareceu em `Command.txt` nem na busca em `CustomMove.txt`; `/testando` aparece apenas como exemplo comentado em `CustomCommandDescription.txt`. A ausência literal não identifica quem processa `/control` nem prova comportamento em runtime.
 - Próximo passo sugerido: buscar `/control`, `Tower Arka War Event`, `NpcCommand` e `CustomNpcCommand` em arquivos de texto e scripts somente dentro da Data principal, anotando caminho e linha. Não modificar arquivos nem inferir runtime sem evidência do código consumidor.
+
+
+## 35. DATA-05 — referências adicionais a /control e CustomNpcQuest (2026-10-14)
+
+Busca textual fornecida pelo usuário, restrita à Data principal e às extensões `.txt`, `.lua`, `.ini`, `.cfg`, `.xml` e `.json`, encontrou:
+
+- `Custom/CustomNpcCommand.txt`, linha 10: NPC 793, mapa 92, coordenadas 188/102, NpcTalk 1, texto `/control`, comentário `Tower Arka War Event`.
+- `Custom/CustomNpcQuest.txt`, linha 11: comentário `OpenNpc - Open the normal Npc (Shop, CustomNpcMove, CustomNpcCommand, etc)`. Isso indica que a configuração de quest documenta um caminho de interação que pode abrir NPCs normais e cita CustomNpcCommand, mas não comprova a implementação nem que `/control` funcione.
+- `Message/Message_eng.txt`, linha 339, ID 508: `[Arka War] use the command /control in the coordinate 189 101`; linha 912, ID 1527: `[Arka War] Control the Tower use the /control command`.
+- `Message/Message_por.txt`, linha 339, ID 508: `[Arka War] Use o comando /control na cordenada 189 101`; linha 914, ID 1527: `[Arka War] Controle a Torre use o comando /control`.
+- `Message/Message_spn.txt`, linha 339, ID 508: `[Arka War] Utilice el comando /control en la coordenada 189 101!`; linha 915, ID 1527: `[Arka War] Controla la torre usa el comando /control`.
+
+Interpretação: `/control` está referenciado no contexto textual do evento Arka War em três idiomas e associado a um NPC em mapa 92. A divergência aparente entre coordenadas NPC (188,102) e mensagem (189,101) pode ser proximidade/posição de interação; não declarar erro sem compreender a lógica de distância. Próximo passo: inspecionar cabeçalho e conteúdo integral de `Custom/CustomNpcQuest.txt` e metadados/hashes dos três arquivos Message citados; focar em comentários e estrutura, sem modificar arquivos nem inferir runtime.
