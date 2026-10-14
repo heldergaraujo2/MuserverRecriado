@@ -456,3 +456,12 @@ Resultado confirmado pelo usuário após execução local de leitura do inventá
 2. Comparar conteúdo e estrutura das cópias divergentes, começando por `ConnectMember.txt`, `Command.txt`, `CustomEventDrop.txt`, `CustomMonster.txt` e `CustomMix.txt`.
 3. Registrar diferenças por caminho e linhas, sem substituir arquivos, eleger uma cópia canônica sem evidência ou expor segredos/licenças.
 4. Depois decidir quais arquivos adicionais de `.txt`/`.lua` merecem inspeção; manter a auditoria do GameServer para depois da etapa Data, conforme a sequência definida.
+
+
+## 23. Ajuste de escopo DATA-05 — somente a pasta Data principal (2026-10-14)
+
+Decisão explícita do usuário:
+- A análise funcional de configurações/scripts será limitada à pasta principal `D:\\Muserver-GitHub\\MuServer - Copia\\Data`.
+- Não comparar nem analisar cópias em `SpeedServer\\Data` ou `SubSalatest\\Data`; essas cópias não fazem parte do escopo prioritário atual.
+- O inventário DATA02B e os resultados globais anteriores permanecem como evidência histórica de descoberta e integridade, mas divergências entre essas cópias secundárias não serão investigadas nem usadas para decidir a configuração canônica.
+- DATA-05 prossegue com leitura estática, somente leitura, dos arquivos-alvo exclusivamente na pasta principal `Data`. Preservar os arquivos originais; não executar o servidor nem editar configurações nesta etapa.
