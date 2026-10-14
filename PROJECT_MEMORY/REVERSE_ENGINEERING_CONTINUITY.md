@@ -643,3 +643,18 @@ Fonte: saída de PowerShell fornecida pelo usuário. Escopo de leitura: `D:\\REA
 
 ### Decisão de investigação
 Não repetir nem sobrescrever essa decompilação. Próximo passo é usar a interface de análise estática do REA/Ghidra para procurar strings e referências cruzadas no GameServer original (por exemplo, nomes de arquivos Data e strings relacionadas a quests), registrar endereços/refs retornados e seguir as referências para funções consumidoras. Manter a análise em modo estático; não executar o servidor nem modificar os binários. Antes de iniciar uma consulta REA, confirmar o caminho exato do executável e consultar a ajuda já salva em `D:\\REA\\analise_MuServer\\ajuda_*.txt` se for necessário validar a sintaxe da CLI.
+
+
+## 38. GS-DATA-01 — busca estática inicial por strings/procedimentos de quest (2026-10-14)
+
+Fonte: saída de PowerShell fornecida pelo usuário, REA 6.4.0 / Ghidra 12.1.4. Alvo: `D:\\Muserver-GitHub\\MuServer - Copia\\GameServer\\GameServer.exe`; SHA-256 observado: `acc5cf86001af2dd93c5bfc2d8f6b11aa2e665a4f7456732a0f02c79d584a461`.
+
+### Evidência observada
+- Consulta `rea search <exe> '(CustomNpcQuest|CustomNpcCommand|OpenNpc|Monster Kill|Reward Coins|Reward Item|Quest)' --kind strings --mode regex --format json` retornou apenas uma string definida no endereço `0x26e4bc8`: manifesto XML de execução (`requestedExecutionLevel level='asInvoker'`). Não é evidência relacionada a quest.
+- Consulta `rea search <exe> '(quest|npc|reward|monster|kill)' --kind procedures --mode regex --format json` retornou `raw_result: []`.
+- Ambas as evidências identificam o mesmo SHA-256 do GameServer principal.
+- O perfil declara `string_inventory_evidence: defined-data-coverage-v1`; as limitações dizem explicitamente que somente strings definidas pelo Ghidra são observadas e que bytes compactados ou ainda indefinidos podem não aparecer. Portanto, os resultados negativos não demonstram ausência de lógica de quest no executável.
+- A consulta de strings retornou um manifesto XML e nenhuma string de quest; a consulta de procedimentos não encontrou nomes que correspondam ao padrão. Nenhum binário foi executado ou alterado.
+
+### Interpretação e próximo passo
+Tratar como resultado negativo limitado à cobertura atual de strings definidas e nomes de procedimentos. Antes de tentar associar endereços a lógica de quest, examinar o relatório geral/estrutura do executável e as capacidades do provedor; verificar se a análise de strings cobre áreas relevantes e se o binário tem seções empacotadas/obfuscadas. Depois, escolher sondagens estáticas suportadas pelo REA. Não afirmar que quests estão ausentes, nem fazer alterações no binário.
