@@ -418,3 +418,41 @@ Resultado fornecido pelo usuário a partir de `DATA02B_20261014_193103/inventari
 - A tabela de bytes por extensão retornou zero por um erro na expressão `Measure-Object`; os totais de bytes por extensão não estão validados e precisam ser recalculados com `Measure-Object -Property Bytes -Sum`.
 - As extensões indicam prioridades iniciais: `.txt` e `.lua` para inspeção estática de configuração/lógica; `.att`, `.dat`, `.bmd`, `.hit` para identificação estrutural; recursos gráficos devem ser classificados separadamente. Não inferir semântica apenas pela extensão.
 - Próximo passo: recalcular corretamente bytes por extensão e produzir uma amostra de arquivos de configuração relevantes por caminho (por exemplo `Data\\Command.txt`, `Data\\ConnectMember.txt`, `Data\\Character\\DefaultClassInfo.txt`, `Data\\Custom\\CustomMonster.txt`, `Data\\Custom\\CustomMove.txt`, `Data\\Custom\\CustomMix.txt`) para então ler conteúdo em modo somente leitura. Não alterar ou apagar originais.
+
+
+## 22. DATA-04B — agregação de bytes e arquivos prioritários (2026-10-14)
+
+Resultado confirmado pelo usuário após execução local de leitura do inventário `DATA02B_20261014_193103`:
+
+- Inventário: 5.059 entradas; 0 campos `Bytes` inválidos; total agregado de 106.438.652 bytes.
+- Soma de bytes por extensão, entradas / hashes distintos / bytes:
+  - `.txt`: 4.038 / 1.630 / 16.185.560 bytes.
+  - `.ozt`: 313 / 239 / 29.602.275 bytes.
+  - `.att`: 276 / 82 / 18.088.764 bytes.
+  - `.lua`: 122 / 65 / 712.705 bytes.
+  - `.dat`: 117 / 60 / 844.743 bytes.
+  - `.ozj`: 106 / 100 / 10.460.504 bytes.
+  - `.bmd`: 56 / 30 / 22.720.859 bytes.
+  - `.rar`: 10 / 6 / 1.378.962 bytes.
+  - `.smd`: 8 / 6 / 2.723.532 bytes.
+  - `.db`: 5 / 3 / 245.960 bytes.
+  - `.tga`: 4 / 4 / 3.408.022 bytes.
+  - `.hit`: 3 / 1 / 47.628 bytes.
+  - `.jpg`: 1 / 1 / 19.138 bytes.
+- Os nove nomes-alvo foram encontrados no inventário. O resultado contém várias cópias sob `Data`, `SpeedServer\Data` e `SubSalatest\Data`; portanto, comparar por nome não basta para presumir equivalência funcional.
+- Diferenças relevantes observadas:
+  - `Command.txt`: três cópias de 17.350 bytes com SHA-256 diferentes.
+  - `ConnectMember.txt`: duas cópias idênticas de 207 bytes e uma cópia diferente de 291 bytes.
+  - `CustomEventDrop.txt`: cópia de 2.724 bytes diferente das duas cópias idênticas de 4.021 bytes.
+  - `CustomMix.txt`: três cópias distintas, de 640.238, 476.645 e 633.517 bytes.
+  - `CustomMonster.txt`: uma cópia de 29.043 bytes e duas cópias idênticas de 29.064 bytes.
+  - `CustomMapRequirement.txt`, `CustomMove.txt`, `DefaultClassInfo.txt` e `DefaultClassStatus.txt` são idênticos entre as três cópias listadas.
+- As contagens de TXT/LUA por pasta confirmadas no passo anterior foram: `Data` 1.509; `SubSalatest\Data` 1.491; `SpeedServer\Data` 1.114; e pastas de ferramentas com 18, 15 e 13 entradas, respectivamente. São contagens por raiz de inventário e não necessariamente arquivos únicos globais.
+- O total agregado é a soma das entradas inventariadas, incluindo cópias repetidas; não deve ser descrito como tamanho de arquivos únicos.
+- Limite de escopo: isso confirma integridade aritmética dos tamanhos e localiza divergências por cópia, mas não determina qual configuração está ativa em runtime nem qual cópia deve ser considerada canônica. Não executar nem modificar o servidor nesta fase.
+
+### Próxima etapa DATA-05
+1. Fazer leitura estática, sem edição, das nove configurações-alvo nas cópias encontradas.
+2. Comparar conteúdo e estrutura das cópias divergentes, começando por `ConnectMember.txt`, `Command.txt`, `CustomEventDrop.txt`, `CustomMonster.txt` e `CustomMix.txt`.
+3. Registrar diferenças por caminho e linhas, sem substituir arquivos, eleger uma cópia canônica sem evidência ou expor segredos/licenças.
+4. Depois decidir quais arquivos adicionais de `.txt`/`.lua` merecem inspeção; manter a auditoria do GameServer para depois da etapa Data, conforme a sequência definida.
