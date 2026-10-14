@@ -261,7 +261,7 @@ Após o usuário executar um comando e colar a saída:
 
 O lote-piloto ConnectServer de 2026-10-14 terminou segundo o resumo fornecido: 10 tentativas, 9 sucessos reportados e 1 falha. O hash do executável antes/depois foi igual. Os artefatos principais foram salvos e o resumo está registrado na seção 8.
 
-**Próxima ação:** executar uma auditoria somente de leitura dos resultados do lote-piloto, começando por:
+**Atualização de diagnóstico (2026-10-14, após inspeção do usuário):** O arquivo `lote_20261014_161609_FUN_004017c0.erro.txt` contém somente `REA terminou com código 1.`; o log relacionado tem 0 bytes. Os arquivos `funcoes\FUN_004017c0.json.txt` e `funcoes\FUN_004017c0.c.txt` estão ausentes. Portanto, a falha não deixou JSON nem pseudocódigo visíveis nos caminhos esperados e a causa técnica ainda não foi determinada. Não repetir ainda a decompilação; primeiro validar os nove sucessos e consultar o help/forma de captura de stdout/stderr para garantir que a próxima tentativa diagnóstica preserve a saída real do processo.\n\n**Próxima ação:** executar uma auditoria somente de leitura dos resultados do lote-piloto, começando por:
 - `D:\REA\pacote_muserver\ConnectServer\resultado_lote_20261014_161609.csv`
 - `D:\REA\pacote_muserver\ConnectServer\RESUMO_LOTE_20261014_161609.md`
 - log/erro específico de `FUN_004017c0` dentro de `D:\REA\pacote_muserver\ConnectServer\diagnostico`.
