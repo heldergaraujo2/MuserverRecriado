@@ -326,3 +326,26 @@ Comece lendo este arquivo integralmente. O lote-piloto de ConnectServer já tem 
 - Os artefatos locais originais e a extração de recuperação não foram enviados ao GitHub; esta atualização registra somente a continuidade.
 - Não repetir as duas análises antes de verificar estado dos processos/arquivos temporários do Ghidra. Não apagar manualmente diretórios temporários retidos. Próxima etapa: verificar integridade da recuperação e do executável; depois validar/normalizar as 57 saídas brutas aprovadas em pasta versionada nova, sem sobrescrever originais, e reconciliar cobertura contra inventário.
 
+## 17. Normalização e reconciliação por endereço do lote ConnectServer (2026-10-14)
+
+**Resultados confirmados pelo usuário no PowerShell local.** Os artefatos e relatórios detalhados continuam no computador local; este registro documenta somente os resultados resumidos.
+
+### Normalização versionada
+- Pasta criada sem sobrescrever os artefatos anteriores: `D:\\REA\\pacote_muserver\\ConnectServer\\diagnostico\\cobertura_20261014\\normalizacao_v1_20261014`.
+- Foram criados 57 pseudocódigos `.c.txt` e 57 metadados `.metadata.json`, extraídos das 57 saídas brutas validadas.
+- As duas falhas originais de limpeza do Ghidra foram preservadas separadamente; a normalização não as reclassificou como sucessos.
+- A revisão semântica permanece pendente. Pseudocódigo extraído/normalizado não equivale a comportamento plenamente compreendido.
+- O SHA-256 esperado do executável ConnectServer foi confirmado pelo script local como correspondente ao arquivo examinado.
+
+### Inventário e reconciliação
+- A estrutura correta do arquivo `diagnostico/inventario_procedimentos.json.txt` é um objeto cujo array de registros está em `raw_result`; cada registro usa `value` e `address`. Não procurar a lista em `normalized_result` no nível raiz.
+- `raw_result`: 332 registros; 133 funções internas nomeadas `FUN_<hex>` e 140 importações externas. Os 59 símbolos do lote são nomes adicionais/nomes próprios, não necessariamente funções com prefixo `FUN_`.
+- Diretório `funcoes`: 266 arquivos com padrão `FUN_<hex>.(c.txt|json.txt)`, correspondendo a 133 pares somente se cada pseudocódigo tiver seu metadado correspondente; uma checagem de pareamento por chave continua recomendada antes de afirmar integridade completa.
+- A reconciliação por endereço entre `manifesto.csv` do lote `lote_simbolos_internos_20261014_183049` e `raw_result` encontrou os 59 de 59 endereços; zero ausentes. Amostra conferida: `Catch_All@0040277d` em `0x40277d`, `Catch_All@00402b83` em `0x402b83`, `Catch_All@00402c07` em `0x402c07`, `Catch_All@004044c6` em `0x4044c6` e `__security_check_cookie` em `0x4068c0`.
+- A primeira tentativa de reconciliação que informou zero itens do inventário foi um erro de leitura do script e deve ser considerada supersedida por esta reconciliação por endereço. Não houve evidência de ausência dos 59 símbolos.
+- A classificação dos símbolos não `FUN_` permanece heurística e requer revisão semântica; handlers, funções de runtime, auxiliares, thunks e símbolos de segurança não devem ser tratados automaticamente como lógica de negócio.
+
+### Estado e próximos passos
+- A reconciliação por endereço do lote de 59 está concluída; a revisão semântica e a auditoria de pareamento/contagem de cobertura do inventário não estão concluídas.
+- Não reexecutar os 57 sucessos e não apagar nem sobrescrever os artefatos anteriores.
+- Próximo passo imediato: executar uma verificação compacta de pareamento dos 133 nomes `FUN_<hex>` (um `.c.txt` e um `.json.txt` por nome) e resumir divergências, se houver. Depois, registrar o fechamento da etapa ConnectServer e iniciar DATA-01 com inventário somente de leitura dos diretórios `Data` do MuServer, sem alterar arquivos originais.
