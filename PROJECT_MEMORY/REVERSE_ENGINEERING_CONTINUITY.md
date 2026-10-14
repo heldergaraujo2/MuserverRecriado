@@ -480,3 +480,14 @@ Resultados fornecidos pelo usuário após comandos locais de inventário/leitura
 
 ### Próximo passo
 Continuar a inspeção de `Command.txt` a partir de amostras controladas das entradas e localizar `Command.dat` apenas dentro da pasta principal `Data`. Não compartilhar conteúdo sensível caso apareça.
+
+
+## 25. DATA-05 — estrutura inicial de Command.txt (2026-10-14)
+
+Resultados fornecidos pelo usuário a partir de leitura local somente leitura do arquivo principal `Data\\Command.txt`:
+
+- Metadados previamente confirmados: 17.350 bytes; SHA-256 `526F26427A36899AC0DA1FED935DEDB9669AFEE6BD8EFE79D320B2CCDC32AC5F`.
+- A expressão de amostragem identificou linhas numeradas com nome de comando entre aspas. As primeiras 15 entradas têm índices 0–14 e incluem `/move`, `/post`, `/f`, `/a`, `/v`, `/e`, `/c`, `/pk`, `/zen`, `/evo`, `/bau`, `/reset`, `/gmmove`, `/!` e `/track`.
+- O cabeçalho descreve campos por categoria `AL0`–`AL3`, dinheiro, níveis, resets, delay, GameMaster e moedas. A amostra mostra diferenças de valores entre comandos; para `/evo` e `/reset`, os quatro valores de habilitação exibidos são zero; para `/zen`, esses quatro valores também são zero, embora outros campos da linha sejam distintos. Isso é uma leitura dos valores da configuração, não confirmação de comportamento em execução.
+- A busca recursiva por nome exato `Command.dat` dentro da pasta principal `Data` não encontrou arquivo correspondente. Isso não determina se o arquivo está ausente em todo o pacote, se é procurado fora de `Data`, ou se o comentário do TXT está desatualizado.
+- Próxima verificação: contar as entradas identificadas, resumir nomes e valores de habilitação sem imprimir o arquivo completo, e procurar referências textuais a `Command.dat` somente dentro da pasta principal `Data`. Não modificar configuração nem executar binários.
