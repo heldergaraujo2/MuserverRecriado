@@ -627,3 +627,19 @@ A configuração sugere um fluxo de quests por NPC com requisitos de nível, aba
 1. Examinar outros arquivos de configuração que definem NPCs/quests e os registros de monstros/item IDs relevantes, sem executar binários.
 2. Pesquisar no código decompilado ou em símbolos estáticos do executável referências ao nome `CustomNpcQuest.txt` e às seções numeradas, para identificar o consumidor e validar a gramática.
 3. Manter as mensagens de Arka War e o NPC `/control` como uma trilha separada: são evidências relacionadas ao evento, não prova de implementação da quest customizada.
+
+
+## 37. DATA-07 — avaliação dos artefatos de decompilação do GameServer (2026-10-14)
+
+Fonte: saída de PowerShell fornecida pelo usuário. Escopo de leitura: `D:\\REA\\analise_GameServer` e listagem de diretórios em `D:\\REA\\pacote_muserver`. Nenhum binário ou arquivo de evidência foi modificado.
+
+### Resultado observado
+- `D:\\REA\\analise_GameServer\\decompilacao_lote` contém `entry.c.txt` e funções como `FUN_02c576ff`, `FUN_02dd1fb6`, `FUN_02dd1fc0`, `FUN_02deb620`, `FUN_02e6f72b` e outras.
+- A maioria dos arquivos pequenos de função apenas chama outra função e retorna; são wrappers/trampolins, não implementação de lógica de quest visível.
+- `FUN_02d9d173` e `FUN_02f1f4ad` apresentam chamadas LOCK/UNLOCK e avisos do decompilador; `FUN_02f1f4ad` inclui estado global `DAT_02d8dd4c`, laço e possível despacho indireto, mas não há evidência suficiente para atribuir semântica de quest.
+- A busca textual pelos termos `CustomNpcQuest`, `CustomNpc`, `Quest`, `OpenNpc`, `Monster Kill` e `Reward Coins` não encontrou correspondências em `funcoes_recuperadas.c.txt`, `inventario_procedimentos.json` ou `ultima_resposta.json`. A saída mostrou o inventário de procedimentos dentro do JSON, não código consumidor de configuração.
+- Os diretórios de primeiro nível em `D:\\REA\\pacote_muserver` observados foram `ConnectServer`, `DATA`, `diagnostico_cli` e `GameServer`; isso não prova que não existam artefatos em outros locais.
+- O resultado atual da análise do GameServer mostra um conjunto pequeno de funções e referências, insuficiente para ligar `CustomNpcQuest.txt` à implementação. A ausência de strings nos artefatos pesquisados é ausência de evidência nesses arquivos, não prova de ausência no executável.
+
+### Decisão de investigação
+Não repetir nem sobrescrever essa decompilação. Próximo passo é usar a interface de análise estática do REA/Ghidra para procurar strings e referências cruzadas no GameServer original (por exemplo, nomes de arquivos Data e strings relacionadas a quests), registrar endereços/refs retornados e seguir as referências para funções consumidoras. Manter a análise em modo estático; não executar o servidor nem modificar os binários. Antes de iniciar uma consulta REA, confirmar o caminho exato do executável e consultar a ajuda já salva em `D:\\REA\\analise_MuServer\\ajuda_*.txt` se for necessário validar a sintaxe da CLI.
