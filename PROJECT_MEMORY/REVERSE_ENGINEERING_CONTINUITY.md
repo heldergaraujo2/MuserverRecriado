@@ -390,3 +390,18 @@ Resultado fornecido pelo usuário após execução local de busca somente leitur
 - O usuário não incluiu o cabeçalho inicial do resumo nem o total de erros de acesso na saída enviada; esses dados permanecem não confirmados.
 - A contagem recursiva inclui subdiretórios e, como diretórios Data podem estar aninhados ou conter cópias de arquivos semelhantes, as contagens não devem ser somadas para declarar quantidade de arquivos únicos do repositório.
 - Próxima ação: criar um inventário detalhado versionado em uma pasta nova, contendo caminho relativo/absoluto, extensão, tamanho e SHA-256 de cada arquivo dentro de cada diretório Data, sem modificar arquivos de origem. Preservar relatórios preexistentes e incluir tratamento de erros explícito. Depois agrupar por extensão e hashes para localizar duplicatas exatas sem apagá-las.
+
+## 20. DATA-02B — inventário detalhado com SHA-256 concluído (2026-10-14)
+
+Resultado confirmado pelo usuário após execução local:
+- Diretórios `Data` encontrados: 12.
+- Arquivos inventariados com SHA-256: 5.059.
+- Falhas reportadas no cálculo/coleta: 0.
+- Saída: `D:\\REA\\pacote_muserver\\DATA\\inventario\\DATA02B_20261014_193103`.
+- Inventário principal: `inventario_arquivos.csv`.
+- Resumo por extensão: `resumo_por_extensao.csv`.
+- Relatório de possíveis duplicatas exatas: `duplicatas_sha256.csv`.
+- Tentativa anterior `DATA02_20261014_192844` preservada; inválida porque o ambiente não possui `[IO.Path]::GetRelativePath()`. A falha foi corrigida por cálculo de caminho relativo baseado em prefixo.
+- Dez extensões mais frequentes: `.txt` 4.038; `.ozt` 313; `.att` 276; `.lua` 122; `.dat` 117; `.ozj` 106; `.bmd` 56; `.rar` 10; `.smd` 8; `.db` 5.
+- O total de 5.059 representa entradas encontradas recursivamente em cada diretório Data, não necessariamente 5.059 arquivos únicos em todo o repositório, pois pastas aninhadas e cópias podem se sobrepor.
+- Próxima etapa: examinar o resumo completo por extensão e quantificar os grupos de SHA-256 repetidos; em seguida classificar os formatos e identificar arquivos de dados relevantes para a lógica do servidor. Não apagar, mover ou sobrescrever arquivos de origem.
