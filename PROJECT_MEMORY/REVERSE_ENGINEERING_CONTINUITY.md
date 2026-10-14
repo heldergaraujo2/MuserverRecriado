@@ -573,3 +573,14 @@ Resultado de enumeração recursiva fornecido pelo usuário, restrita à Data pr
 - Outros arquivos encontrados com “Move” no nome: `Custom\\CustomMoveAuto.txt` (852 bytes; SHA-256 `6DFCB3C89FD04D1A8A9A6238C0C46E3FB17AA502222FFD07916F41DE631A7DF1`), `Custom\\CustomNpcMove.txt` (2.373 bytes; SHA-256 `7A381C3C1DCCD0D05028A807FF8C3D152ED9172EB563E263464C8A26ADA332E9`), `Item\\ItemMove.txt` (6.700 bytes; SHA-256 `6726AEC97434EC909F353F18C605C62570BD6161A11AED4BDEA0D0044D2C91EA`), `Monster\\MovePath\\MovePath_35.dat` (4.574 bytes; SHA-256 `012F6028907041B442C9E3615FDD12B6CEB315A9B0FBDE02AB6795B57D2F0814`), `Move\\Move.txt` (36.308 bytes; SHA-256 `4324A0F7E298422E730645E2934E420B8A6C76AF38C5E2516DF1330DE0950209`) e `Move\\MoveSummon.txt` (6.782 bytes; SHA-256 `8DCEFDC7A05B2D21C24D8FEBD94D525171B37D754FC878E420BC05CF15AE7C32`).
 - Nenhum arquivo com “Control” no nome foi encontrado sob a Data principal. Isso não demonstra ausência do comando em conteúdo de arquivos.
 - Próximo passo: cruzar `/quest`, `/control`, `/zen`, `/enterarena` e `/testando` com `Custom\\CustomMove.txt` e inspecionar cabeçalho/linhas relevantes sem alterar arquivos.
+
+
+## 34. DATA-05 — cruzamento concluído com CustomMove.txt (2026-10-14)
+
+Saída fornecida pelo usuário para o arquivo `Data/Custom/CustomMove.txt`:
+
+- Tamanho 24.119 bytes; SHA-256 `5582FAE61C841F749D6DDF5CCF7222B76CF64AA9FA9820C81D443B569B4ACA43`, consistente com o inventário anterior.
+- Cabeçalho declara campos INDEX, Command, Map, X, Y, MinLevel, MaxLevel, MinReset, MaxReset, MinMReset, MaxMReset, AccountLevel e PKMove. As linhas de exemplo incluem comandos de movimento como `/pvp`, `/bar`, `/irbau` e `/igreja`.
+- A busca sem distinção entre maiúsculas/minúsculas por `/quest`, `/control`, `/zen`, `/enterarena` e `/testando` não encontrou correspondências nesse arquivo.
+- Conclusão limitada: `/quest`, `/zen` e `/enterarena` aparecem em `Command.txt` conforme a seção 32; `/control` não apareceu em `Command.txt` nem na busca em `CustomMove.txt`; `/testando` aparece apenas como exemplo comentado em `CustomCommandDescription.txt`. A ausência literal não identifica quem processa `/control` nem prova comportamento em runtime.
+- Próximo passo sugerido: buscar `/control`, `Tower Arka War Event`, `NpcCommand` e `CustomNpcCommand` em arquivos de texto e scripts somente dentro da Data principal, anotando caminho e linha. Não modificar arquivos nem inferir runtime sem evidência do código consumidor.
