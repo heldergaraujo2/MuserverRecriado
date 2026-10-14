@@ -369,3 +369,24 @@ Isso encerra a verificação estrutural de pareamento dos 133 artefatos FUN_ e, 
 
 ### Próxima etapa autorizada: DATA-01 — inventário somente de leitura
 Iniciar inventário dos diretórios chamados `Data` dentro de `D:\\Muserver-GitHub\\MuServer - Copia`, registrando caminhos, extensões, tamanhos e hashes em saída versionada nova sob `D:\\REA\\pacote_muserver\\DATA\\inventario`. Não alterar, renomear, mover ou apagar arquivos do MuServer. Primeiro localizar as pastas `Data` e contar arquivos; só então ampliar para hashing/inventário detalhado. Registrar a data da execução e a raiz examinada, e preservar qualquer relatório preexistente.
+
+## 19. DATA-01 — descoberta inicial dos diretórios Data (2026-10-14)
+
+Resultado fornecido pelo usuário após execução local de busca somente leitura sob `D:\\Muserver-GitHub\\MuServer - Copia`:
+- Foram localizados 12 diretórios cujo nome é `Data` (a busca não diferencia maiúsculas/minúsculas).
+- Contagens por diretório:
+  - `Data`: 1.631 arquivos recursivos; 12.124.621 bytes.
+  - `GameServer\Data`: 9; 110.898 bytes.
+  - `GameServerCS\DATA`: 9; 110.857 bytes.
+  - `MHPServer\Data`: 8; 311.087 bytes.
+  - `SpeedServer\Data`: 1.236; 11.381.496 bytes.
+  - `SpeedServer\GameServer\Data`: 9; 110.936 bytes.
+  - `SubSalatest\Data`: 1.613; 11.834.457 bytes.
+  - `SubSalatest\GameServer\Data`: 9; 110.937 bytes.
+  - `Tools\Editores\MuEditor\Data`: 3; 1.212.780 bytes.
+  - `Tools\Gerador de Main\MAIN_INFO v41 - Season 6\CheckSum\Data`: 36; 9.419.180 bytes.
+  - `Tools\Gerador de Main\MAIN_INFO v41 - Season 6\Premium\Data`: 467; 53.716.669 bytes.
+  - `Tools\Gerador de Main\MAIN_INFOS6.20\CheckSum\Data`: 29; 5.994.734 bytes.
+- O usuário não incluiu o cabeçalho inicial do resumo nem o total de erros de acesso na saída enviada; esses dados permanecem não confirmados.
+- A contagem recursiva inclui subdiretórios e, como diretórios Data podem estar aninhados ou conter cópias de arquivos semelhantes, as contagens não devem ser somadas para declarar quantidade de arquivos únicos do repositório.
+- Próxima ação: criar um inventário detalhado versionado em uma pasta nova, contendo caminho relativo/absoluto, extensão, tamanho e SHA-256 de cada arquivo dentro de cada diretório Data, sem modificar arquivos de origem. Preservar relatórios preexistentes e incluir tratamento de erros explícito. Depois agrupar por extensão e hashes para localizar duplicatas exatas sem apagá-las.
