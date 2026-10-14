@@ -502,3 +502,15 @@ Resultado fornecido pelo usuário a partir da leitura estática de `Data\\Comman
 - A lista inclui comandos de movimentação, chat, atributos, reset, administração, economia, eventos, grupos/parties, lojas offline e outras funções, conforme nomes observados. Essa classificação é indicativa pelos nomes, não confirmação de comportamento interno.
 - Busca por `Command.dat` nos arquivos `.txt`/`.lua` da pasta principal `Data` retornou somente o comentário da linha 19 de `Command.txt`: `// Obs: Others configurations see Command.dat`. Não foram encontradas outras referências textuais no conjunto pesquisado. Isso não prova que o arquivo inexista fora da pasta Data ou que não seja acessado de modo indireto.
 - Próximo passo: verificar diretamente no arquivo os índices/nomes duplicados e gerar um resumo compacto de campos de habilitação para cada comando, sem imprimir a tabela inteira. Continuar em modo somente leitura, sem executar o servidor e sem analisar cópias secundárias.
+
+
+## 27. DATA-05 — duplicata confirmada em Command.txt (2026-10-14)
+
+Resultado da extração local fornecida pelo usuário a partir do arquivo principal `Data\\Command.txt`:
+
+- Linhas reconhecidas pela expressão regular: 104.
+- Índices distintos: 103.
+- Nomes distintos: 103.
+- Duplicata confirmada na própria extração do arquivo: índice `95`, nome `/setbuff`, aparece duas vezes.
+- Classificação: anomalia estrutural confirmada na configuração. O efeito em runtime é desconhecido; não presumir se o parser ignora, substitui ou trata de outro modo a entrada repetida.
+- Não editar o arquivo para remover a duplicata nesta fase. Próximo passo: inspecionar as linhas físicas correspondentes e resumir os campos iniciais de habilitação com posições ainda tratadas como provisórias, sem inferir comportamento além do cabeçalho.
