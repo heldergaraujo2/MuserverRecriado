@@ -405,3 +405,16 @@ Resultado confirmado pelo usuário após execução local:
 - Dez extensões mais frequentes: `.txt` 4.038; `.ozt` 313; `.att` 276; `.lua` 122; `.dat` 117; `.ozj` 106; `.bmd` 56; `.rar` 10; `.smd` 8; `.db` 5.
 - O total de 5.059 representa entradas encontradas recursivamente em cada diretório Data, não necessariamente 5.059 arquivos únicos em todo o repositório, pois pastas aninhadas e cópias podem se sobrepor.
 - Próxima etapa: examinar o resumo completo por extensão e quantificar os grupos de SHA-256 repetidos; em seguida classificar os formatos e identificar arquivos de dados relevantes para a lógica do servidor. Não apagar, mover ou sobrescrever arquivos de origem.
+
+## 21. DATA-03 — distribuição por extensão e duplicação (2026-10-14)
+
+Resultado fornecido pelo usuário a partir de `DATA02B_20261014_193103/inventario_arquivos.csv`:
+- Entradas no inventário: 5.059.
+- Hashes SHA-256 distintos: 2.227.
+- Grupos de hashes repetidos: 1.574.
+- Entradas pertencentes a grupos repetidos: 4.406.
+- Extensões por entradas / hashes distintos: `.txt` 4.038 / 1.630; `.ozt` 313 / 239; `.att` 276 / 82; `.lua` 122 / 65; `.dat` 117 / 60; `.ozj` 106 / 100; `.bmd` 56 / 30; `.rar` 10 / 6; `.smd` 8 / 6; `.db` 5 / 3; `.tga` 4 / 4; `.hit` 3 / 1; `.jpg` 1 / 1.
+- Exemplos de duplicação exata observada: `003 - Harold the Wandering Merchant.txt` em múltiplas cópias Data; `Kalimdor.OZT` repetido 42 vezes; `Rank05.bmd` repetido 19 vezes; arquivos de terreno `Terrain44.att` e `Terrain40.att` repetidos entre cópias Data.
+- A tabela de bytes por extensão retornou zero por um erro na expressão `Measure-Object`; os totais de bytes por extensão não estão validados e precisam ser recalculados com `Measure-Object -Property Bytes -Sum`.
+- As extensões indicam prioridades iniciais: `.txt` e `.lua` para inspeção estática de configuração/lógica; `.att`, `.dat`, `.bmd`, `.hit` para identificação estrutural; recursos gráficos devem ser classificados separadamente. Não inferir semântica apenas pela extensão.
+- Próximo passo: recalcular corretamente bytes por extensão e produzir uma amostra de arquivos de configuração relevantes por caminho (por exemplo `Data\\Command.txt`, `Data\\ConnectMember.txt`, `Data\\Character\\DefaultClassInfo.txt`, `Data\\Custom\\CustomMonster.txt`, `Data\\Custom\\CustomMove.txt`, `Data\\Custom\\CustomMix.txt`) para então ler conteúdo em modo somente leitura. Não alterar ou apagar originais.
