@@ -514,3 +514,13 @@ Resultado da extração local fornecida pelo usuário a partir do arquivo princi
 - Duplicata confirmada na própria extração do arquivo: índice `95`, nome `/setbuff`, aparece duas vezes.
 - Classificação: anomalia estrutural confirmada na configuração. O efeito em runtime é desconhecido; não presumir se o parser ignora, substitui ou trata de outro modo a entrada repetida.
 - Não editar o arquivo para remover a duplicata nesta fase. Próximo passo: inspecionar as linhas físicas correspondentes e resumir os campos iniciais de habilitação com posições ainda tratadas como provisórias, sem inferir comportamento além do cabeçalho.
+
+
+## 28. DATA-05 — duplicata idêntica e amostra de campos iniciais (2026-10-14)
+
+Resultado fornecido pelo usuário a partir da inspeção local de `Data\\Command.txt`:
+
+- As duas ocorrências de índice 95 / `/setbuff` estão nas linhas físicas 120 e 121. As linhas apresentadas têm os mesmos valores numéricos e descrição; a diferença visível é de espaçamento. Tratar como duplicata estrutural provavelmente redundante, mas o comportamento do parser para índices repetidos permanece desconhecido. Não remover nem alterar.
+- A extração dos quatro primeiros números após o nome mostra padrões `1,1,1,1`, `0,0,0,0`, `2,1,1,1` e `0,1,1,1` em entradas diferentes. O cabeçalho rotula os campos de habilitação por categorias `AL0`–`AL3`; não inferir ainda o efeito operacional do valor 2 ou o comportamento em runtime.
+- Exemplos visíveis: `/move` e `/post` começam com `1,1,1,1`; `/evo`, `/reset` e `/mreset` com `0,0,0,0`; `/make` e `/setbuff` com `2,1,1,1`; `/maketarget` com `0,1,1,1`.
+- Próximo passo: calcular distribuição desses quatro valores e localizar os demais arquivos de configuração de comandos somente dentro da pasta principal `Data`, sem analisar cópias secundárias ou editar arquivos.
