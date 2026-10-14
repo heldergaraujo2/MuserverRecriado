@@ -284,3 +284,33 @@ Em 2026-10-13:
 ## 14. Instrução para um novo chat
 
 Comece lendo este arquivo integralmente. O lote-piloto de ConnectServer já tem resultado reportado na seção 8. Antes de propor qualquer comando, verifique se existe processamento ativo e confira os artefatos locais. Continue do item **12 — Próxima etapa exata**. Um comando por vez, aguarde a saída, mantenha análise estática, preserve tudo, cubra o MuServer inteiro e atualize este documento no GitHub depois de cada resultado confirmado.
+
+
+## 15. Atualização de continuidade — lote de símbolos internos ConnectServer (2026-10-14)
+
+**Evidência fornecida pelo usuário no terminal local; o conteúdo bruto permanece local e não foi copiado para este repositório.**
+
+- Executável analisado: `D:\\Muserver-GitHub\\MuServer - Copia\\ConnectServer\\ConnectServer.exe`.
+- SHA-256 antes e depois do lote: `F25EECB6C65214B7658FC2A8A1B0C786BBB1B718A78405A8E4C61D88C9477AED`; o usuário confirmou `Hash preservado: True`.
+- Inventário: `D:\\REA\\pacote_muserver\\ConnectServer\\diagnostico\\inventario_procedimentos.json.txt`. O formato real de cada item em `normalized_result` usa `value` e `address` (não `name`), totalizando 332 itens; uma auditoria anterior usando `name` contou incorretamente zero funções e foi corrigida.
+- Funções nomeadas `FUN_<hex>`: a auditoria corrigida deve usar `value`. Depois de recuperar `FUN_004017c0`, há 133 pares de artefatos `.c.txt` e `.json.txt` reportados no diretório `funcoes`. A fila `fila_funcoes_pendentes.csv` tem 114 registros, todos `SUCESSO_VALIDADO`. Isso confirma o estado da fila e presença dos artefatos reportados, não compreensão semântica completa.
+- `FUN_004017c0` foi descompilada em nova tentativa usando `--full-output`; a saída JSON era válida, com `normalized_result` não vazio. Foram criados `funcoes\\FUN_004017c0.c.txt` (274 bytes) e `funcoes\\FUN_004017c0.json.txt` (8.548 bytes). Inferência estrutural cautelosa: destrutor de estilo C++ para `CCriticalSection`, com ajuste de vtable, chamada a `DeleteCriticalSection` e desalocação condicional.
+- Foi criada a classificação local `diagnostico\\cobertura_20261014\\classificacao_entradas_nao_FUN.csv` com 59 entradas internas que não seguem o padrão `FUN_<hex>`: 4 `HANDLER_EXCECAO`, 2 `PONTO_ENTRADA`, 25 `REVISAR_MANUALMENTE`, 22 `RUNTIME_OU_BIBLIOTECA`, 5 `SEGURANCA_SEH`, 1 `SIMBOLO_CONFLITANTE`. Essas categorias são heurísticas de triagem, não confirmação semântica.
+- O lote consolidado de endereços únicos foi executado sequencialmente no diretório local `D:\\REA\\pacote_muserver\\ConnectServer\\diagnostico\\cobertura_20261014\\lote_simbolos_internos_20261014_183049`.
+  - Manifesto: `manifesto.csv`.
+  - Resultado por entrada: `resultados.csv`.
+  - Log: `execucao.log`.
+  - 59 entradas candidatas e 59 endereços únicos processados.
+  - 57 resultados `SUCESSO_BRUTO_VALIDADO`; 2 falhas; cada entrada tem stdout, stderr e metadados individuais.
+  - Falhas: `___tmainCRTStartup` em `0x406b5d` (código de saída 1, stdout 10.580 caracteres) e `MSVCR100.DLL::type_info::_type_info_dtor_internal_method` em `0x40726a` (código 1, stdout 5.306 caracteres). O stdout foi preservado; não foi estabelecida a causa das falhas.
+  - `SUCESSO_BRUTO_VALIDADO` significa somente que o comando terminou com código zero e a saída pôde ser validada como JSON com `ok=true` e `normalized_result` não vazio. Não significa que os artefatos finais foram normalizados nem que a semântica foi revisada.
+- Nenhum binário, pseudocódigo bruto, licença ou segredo foi adicionado a este commit.
+
+### Próxima ação exata
+
+1. Ler localmente o `resultados.csv`, os dois arquivos `stdout.json.txt` e os respectivos `stderr.txt` das falhas; determinar se o código 1 decorreu de erro de finalização após produzir saída parcial ou de resultado inválido. Não reexecutar os 57 sucessos.
+2. Validar os 57 JSONs e extrair as saídas normalizadas em uma nova etapa versionada, preservando todos os arquivos existentes. Antes de criar artefatos oficiais para símbolos não `FUN_`, conferir convenção de nomes, endereço e se a saída é uma função real ou um thunk/auxiliar.
+3. Reconciliar as 59 entradas com os 192 itens não externos do inventário e com os 133 pares de artefatos `FUN_`; não declarar cobertura total até documentar a diferença e a classificação de imports/thunks/handlers/runtime.
+4. Atualizar os relatórios locais de cobertura e só depois prosseguir à fila global (GameServer, ConnectServer_old, DataServer, JoinServer e demais binários), mantendo análise estática e hash do original.
+
+**Estado do GitHub antes desta atualização:** o arquivo mestre estava no blob SHA `d5d95daf862a424492237d425b1f1c3d4ef9c3c5`, cujo texto ainda descrevia o lote-piloto antigo. Esta seção registra os resultados posteriores fornecidos em 2026-10-14; o SHA do commit que grava esta atualização deve ser o retornado pela operação GitHub.
