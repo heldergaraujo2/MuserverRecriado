@@ -563,3 +563,13 @@ Saída fornecida pelo usuário, limitada à Data principal:
 - Nenhuma correspondência para `/control` ou `/testando` apareceu na busca fornecida em `Command.txt`.
 - `Data\\CustomMove.txt` na raiz da Data não existe no caminho exato testado. Isso não comprova ausência de arquivo com nome semelhante em subpastas ou variação de nome/extensão. Próximo passo: listar apenas arquivos da Data principal cujo nome contenha `Move` (ignorando SpeedServer e SubSalatest) para identificar o arquivo correto antes de qualquer novo cruzamento.
 - Não foi feita alteração em arquivos de configuração. Os registros de NPC continuam sendo evidência de configuração estática, não de execução comprovada.
+
+
+## 33. DATA-05 — localização correta de CustomMove.txt (2026-10-14)
+
+Resultado de enumeração recursiva fornecido pelo usuário, restrita à Data principal:
+
+- O arquivo citado por `CustomCommandDescription.txt` existe em `Data\\Custom\\CustomMove.txt`, não em `Data\\CustomMove.txt`. Tamanho 24.119 bytes; SHA-256 `5582FAE61C841F749D6DDF5CCF7222B76CF64AA9FA9820C81D443B569B4ACA43`.
+- Outros arquivos encontrados com “Move” no nome: `Custom\\CustomMoveAuto.txt` (852 bytes; SHA-256 `6DFCB3C89FD04D1A8A9A6238C0C46E3FB17AA502222FFD07916F41DE631A7DF1`), `Custom\\CustomNpcMove.txt` (2.373 bytes; SHA-256 `7A381C3C1DCCD0D05028A807FF8C3D152ED9172EB563E263464C8A26ADA332E9`), `Item\\ItemMove.txt` (6.700 bytes; SHA-256 `6726AEC97434EC909F353F18C605C62570BD6161A11AED4BDEA0D0044D2C91EA`), `Monster\\MovePath\\MovePath_35.dat` (4.574 bytes; SHA-256 `012F6028907041B442C9E3615FDD12B6CEB315A9B0FBDE02AB6795B57D2F0814`), `Move\\Move.txt` (36.308 bytes; SHA-256 `4324A0F7E298422E730645E2934E420B8A6C76AF38C5E2516DF1330DE0950209`) e `Move\\MoveSummon.txt` (6.782 bytes; SHA-256 `8DCEFDC7A05B2D21C24D8FEBD94D525171B37D754FC878E420BC05CF15AE7C32`).
+- Nenhum arquivo com “Control” no nome foi encontrado sob a Data principal. Isso não demonstra ausência do comando em conteúdo de arquivos.
+- Próximo passo: cruzar `/quest`, `/control`, `/zen`, `/enterarena` e `/testando` com `Custom\\CustomMove.txt` e inspecionar cabeçalho/linhas relevantes sem alterar arquivos.
