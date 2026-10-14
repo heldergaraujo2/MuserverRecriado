@@ -465,3 +465,18 @@ Decisão explícita do usuário:
 - Não comparar nem analisar cópias em `SpeedServer\\Data` ou `SubSalatest\\Data`; essas cópias não fazem parte do escopo prioritário atual.
 - O inventário DATA02B e os resultados globais anteriores permanecem como evidência histórica de descoberta e integridade, mas divergências entre essas cópias secundárias não serão investigadas nem usadas para decidir a configuração canônica.
 - DATA-05 prossegue com leitura estática, somente leitura, dos arquivos-alvo exclusivamente na pasta principal `Data`. Preservar os arquivos originais; não executar o servidor nem editar configurações nesta etapa.
+
+
+## 24. DATA-05 — resumo da pasta Data principal e ConnectMember (2026-10-14)
+
+Resultados fornecidos pelo usuário após comandos locais de inventário/leitura, limitados a `D:\\Muserver-GitHub\\MuServer - Copia\\Data`:
+
+- Resumo da pasta principal: 1.631 arquivos, 12.124.621 bytes; 1.481 arquivos `.txt` e 28 arquivos `.lua`.
+- `ConnectMember.txt`: 207 bytes; SHA-256 `4EFF5FF9C7144883CB4212E1C72DC1F85DE1DB1C61D56AFF6DED628D828F2AB5`.
+- Conteúdo observado: comentário `Account Allowed to enter server`, quatro identificadores de conta (`pvp01`, `pvp02`, `pvp03`, `pvp04`) e terminador `end`.
+- Interpretação provisória: o comentário indica uma lista de contas permitidas para entrada. A leitura estática, isoladamente, não prova qual executável consome o arquivo nem se ele participa da autenticação principal.
+- `Command.txt`: 17.350 bytes; SHA-256 `526F26427A36899AC0DA1FED935DEDB9669AFEE6BD8EFE79D320B2CCDC32AC5F`. O cabeçalho descreve uma tabela de comandos com parâmetros de habilitação, dinheiro, níveis, resets, atraso, nível de Game Master e moedas (WC/WP/GP), e referencia `Command.dat` como configuração complementar. A primeira entrada visível é `/move`; a linha exibe `Enable = 1` e descrição de movimento para um mapa. É necessário conferir o restante da tabela e a estrutura dos campos antes de concluir regras por nível/permissão.
+- Escopo permanece somente a pasta principal `Data`; não comparar/analisar `SpeedServer\\Data` ou `SubSalatest\\Data`. Somente leitura; não executar nem editar o servidor/configurações nesta fase.
+
+### Próximo passo
+Continuar a inspeção de `Command.txt` a partir de amostras controladas das entradas e localizar `Command.dat` apenas dentro da pasta principal `Data`. Não compartilhar conteúdo sensível caso apareça.
