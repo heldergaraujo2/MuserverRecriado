@@ -534,3 +534,12 @@ Resultado fornecido pelo usuário após leitura somente leitura de `Data\\Comman
 - Não concluir ainda o significado operacional do valor 2; o campo separado `GameMaster` também está presente no cabeçalho e precisa ser analisado separadamente.
 - Arquivos com nome contendo `Command` encontrados na pasta principal Data: `Command.txt` (17.350 bytes), `Custom\\CustomCommandDescription.txt` (1.633 bytes) e `Custom\\CustomNpcCommand.txt` (863 bytes). A busca anterior por `Command.dat` encontrou apenas a menção no comentário de `Command.txt`; nenhum arquivo exato `Command.dat` foi localizado dentro da Data principal.
 - Próximo passo: ler os cabeçalhos e amostras limitadas de `CustomCommandDescription.txt` e `CustomNpcCommand.txt`, registrando seus hashes, sem modificar arquivos nem analisar cópias secundárias.
+
+
+## 30. DATA-05 — primeiros dados dos arquivos complementares de comandos (2026-10-14)
+
+Saída local fornecida pelo usuário, escopo restrito à pasta principal `D:\\Muserver-GitHub\\MuServer - Copia\\Data`:
+
+- `Custom\\CustomCommandDescription.txt`: 1.633 bytes; SHA-256 `F66060E41079A3C893620E2C41A81C2FB0B05EB667BB5A66BD3796F548173188`. Cabeçalho declara colunas `ID`, `Command`, `String`; texto de comando com tamanho máximo de 127 caracteres. A observação do arquivo diz que o comando não pode existir em `Command.txt` nem em `CustomMove.txt`. A amostra inicial termina antes de mostrar registros de configuração, portanto os registros ainda não foram inspecionados.
+- `Custom\\CustomNpcCommand.txt`: 863 bytes; SHA-256 `2DFB8B211D028C6616BF572D0165FE95D27064D03A2096D292D08846FDBD1F2C`. Cabeçalho declara `Index, Npc, NpcMap, NpcX, NpcY, NpcTalk, Command Text`. Registros visíveis: índice 0, NPC 601, mapa 00, coordenadas 143/145, NpcTalk 1, comando `/quest`; índice 1, NPC 793, mapa 92, coordenadas 188/102, NpcTalk 1, comando `/control` (comentário Tower Arka War Event); índice 2, NPC 789, mapa 00, coordenadas 121/133, NpcTalk 1, comando `/zen 20`; índice 3, NPC 785, mapa 00, coordenadas 143/145, NpcTalk 1, comando `/enterarena` (comentário Zen). Há `end` após os registros. Essas linhas sugerem comandos associados a NPCs, mas não confirmam a semântica dos campos nem o comportamento em runtime.
+- Próximo passo: ler o conteúdo completo dos dois arquivos pequenos, mantendo os hashes e verificando os registros reais antes de cruzar nomes com `Command.txt` e `CustomMove.txt`. Não modificar arquivos.
