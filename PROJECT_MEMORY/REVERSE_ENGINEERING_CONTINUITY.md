@@ -177,26 +177,43 @@ Raiz de evidências: `D:\REA\pacote_muserver\GameServer`
 - Endereços iniciais da lista não externa incluem `0x401030 FUN_00401030`, `0x401060 FUN_00401060`, `0x401070 FUN_00401070`, `0x4011a0 FUN_004011a0`, `0x4014a0 FUN_004014a0`, `0x401520 FUN_00401520`, `0x401620 FUN_00401620`, `0x401660 FUN_00401660`, `0x401720 FUN_00401720`, `0x4017c0 FUN_004017c0`, `0x4017f0 FUN_004017f0`, `0x401810 FUN_00401810`, `0x401890 FUN_00401890`, `0x401960 FUN_00401960`, `0x401b40 FUN_00401b40`, `0x401b70 FUN_00401b70`, `0x401c40 FUN_00401c40`, `0x401ed0 FUN_00401ed0`, `0x401f60 FUN_00401f60`, `0x401fc0 FUN_00401fc0`, `0x402020 FUN_00402020`, `0x402040 FUN_00402040`, `0x402090 FUN_00402090`, `0x402150 FUN_00402150`, `0x402250 FUN_00402250`, `0x4022c0 FUN_004022c0`, `0x4024a0 FUN_004024a0`, `0x4026d0 FUN_004026d0`, além de entradas como `Catch_All@0040277d` e `Catch_All@00402b83`.
 - Observação sobre catálogo: entradas de exceção como `Catch_All@...` podem não obedecer ao padrão de nome `FUN_...`; o script de lote não deve descartá-las sem classificação.
 
-## 8. Lote-piloto ConnectServer — estado ainda NÃO confirmado
+## 8. Lote-piloto ConnectServer — concluído com 1 falha (2026-10-14)
 
-Foi enviado ao usuário um script PowerShell para decompilar até 10 funções pendentes de ConnectServer, em sequência. O script:
-- lê `procedimentos_internos.csv`;
-- seleciona nomes que correspondem a `^FUN_[0-9A-Fa-f]+$`;
-- tenta pular nomes que já têm `funcoes\<nome>.json.txt`;
-- chama REA com `--procedure <endereço> --provider ghidra --format json --filter-output normalized_result`;
-- grava JSON, pseudocódigo C, logs por função, `resultado_lote_<timestamp>.csv` e `RESUMO_LOTE_<timestamp>.md`.
+O usuário compartilhou o resumo do lote executado em 2026-10-14 às 16:22:40 -03:00. O resumo reporta que o executável permaneceu inalterado durante o lote.
 
-**A saída do lote-piloto ainda não foi recebida/confirmada neste registro.** Pode estar em execução, ter terminado ou ter falhado. Não iniciar outro REA/Ghidra antes de o usuário informar o resultado e/ou de verificar o estado local.
+- SHA-256 inicial: `F25EECB6C65214B7658FC2A8A1B0C786BBB1B718A78405A8E4C61D88C9477AED`
+- SHA-256 final: `F25EECB6C65214B7658FC2A8A1B0C786BBB1B718A78405A8E4C61D88C9477AED`
+- Executável inalterado: `True` (conforme resumo do lote).
+- Funções tentadas: 10; sucessos reportados: 9; falhas reportadas: 1; conflitos preservados: 0.
+- CSV: `D:\REA\pacote_muserver\ConnectServer\resultado_lote_20261014_161609.csv` (4.205 bytes).
+- Resumo: `D:\REA\pacote_muserver\ConnectServer\RESUMO_LOTE_20261014_161609.md` (1.611 bytes).
+- Logs e eventuais erros: `D:\REA\pacote_muserver\ConnectServer\diagnostico`.
+- O usuário informou que os arquivos anteriores não foram apagados.
 
-Pontos a validar no resultado:
-1. O resumo indica quantas funções foram selecionadas, puladas, concluídas e falharam?
-2. Cada JSON é JSON válido e contém o formato esperado?
-3. O pseudocódigo `.c.txt` existe e é não vazio quando a saída permitir extração?
-4. Cada função tem log e status por separado?
-5. O script não marcou como sucesso uma saída vazia, erro de limpeza ou pseudocódigo parcial?
-6. O script pulou resultados antigos apenas pela existência do JSON, sem validá-los? Se sim, reconciliar isso em vez de assumir que estão íntegros.
-7. Quantas funções restam das 192 entradas não externas? A lista não deve se limitar a nomes `FUN_...`; entradas `Catch_All` e outros símbolos devem ser classificados separadamente.
-8. Atualizar este arquivo com a saída real do usuário e o próximo passo específico.
+### Resultado individual do lote
+
+| Função | Endereço | Estado reportado |
+|---|---:|---|
+| `FUN_004011a0` | `0x4011a0` | SUCESSO |
+| `FUN_004014a0` | `0x4014a0` | SUCESSO |
+| `FUN_00401520` | `0x401520` | SUCESSO |
+| `FUN_00401620` | `0x401620` | SUCESSO |
+| `FUN_00401660` | `0x401660` | SUCESSO |
+| `FUN_00401720` | `0x401720` | SUCESSO |
+| `FUN_004017c0` | `0x4017c0` | FALHA — REA terminou com código 1 |
+| `FUN_004017f0` | `0x4017f0` | SUCESSO |
+| `FUN_00401810` | `0x401810` | SUCESSO |
+| `FUN_00401890` | `0x401890` | SUCESSO |
+
+**Interpretação prudente:** são 9 sucessos conforme validação do script e 1 falha. Ainda não foram inspecionados nesta conversa o conteúdo dos 9 pseudocódigos, o CSV completo nem o log específico de `FUN_004017c0`; portanto, não atribuir semântica às funções nem declarar cobertura integral do lote sem essa inspeção.
+
+### Próximas verificações necessárias
+
+1. Ler a linha de `FUN_004017c0` no CSV e o log/erro correspondente para entender a falha real.
+2. Conferir que os 9 resultados marcados como sucesso têm JSON válido, pseudocódigo não vazio e logs associados; validar se resultados anteriores foram preservados em vez de sobrescritos.
+3. Auditar a lógica de retomada: a existência de um JSON não deve, por si só, ser tomada como prova de resultado íntegro.
+4. Continuar a fila das funções internas do ConnectServer sem ignorar nomes como `Catch_All@...` ou outras entradas que não correspondam ao padrão `FUN_...`.
+5. Não iniciar outro processamento REA/Ghidra concorrente se houver algum processo de análise ativo.
 
 ## 9. Plano de lotes para o MuServer inteiro
 
@@ -242,13 +259,14 @@ Após o usuário executar um comando e colar a saída:
 
 ## 12. Próxima etapa exata no momento desta atualização
 
-**Aguardar/verificar o lote-piloto de ConnectServer que foi enviado, sem iniciar outro decompilador em paralelo.** O usuário deve compartilhar o arquivo `RESUMO_LOTE_<timestamp>.md` criado pelo script e, se houver falha, os trechos relevantes de `resultado_lote_<timestamp>.csv` e os logs correspondentes.
+O lote-piloto ConnectServer de 2026-10-14 terminou segundo o resumo fornecido: 10 tentativas, 9 sucessos reportados e 1 falha. O hash do executável antes/depois foi igual. Os artefatos principais foram salvos e o resumo está registrado na seção 8.
 
-Quando houver saída:
-- auditar o lote;
-- corrigir a lógica de validação/retomada se necessário;
-- medir cobertura contra as entradas reais do inventário;
-- depois criar/rodar um lote sequencial retomável para o restante do ConnectServer, antes de avançar ao próximo binário conforme a fila global.
+**Próxima ação:** executar uma auditoria somente de leitura dos resultados do lote-piloto, começando por:
+- `D:\REA\pacote_muserver\ConnectServer\resultado_lote_20261014_161609.csv`
+- `D:\REA\pacote_muserver\ConnectServer\RESUMO_LOTE_20261014_161609.md`
+- log/erro específico de `FUN_004017c0` dentro de `D:\REA\pacote_muserver\ConnectServer\diagnostico`.
+
+Pedir ao usuário para executar um comando PowerShell que localize e mostre o log de `FUN_004017c0` e as linhas pertinentes do CSV; não repetir a decompilação dessa função antes de compreender o erro. Depois validar os artefatos dos nove sucessos e reconciliar o CSV de resultados com o inventário completo. Em seguida, criar/rodar um lote sequencial retomável para as funções restantes do ConnectServer, incluindo a classificação de entradas não `FUN_...`, antes de avançar aos próximos binários na fila global.
 
 ## 13. Histórico anterior do Ghidra (preservado)
 
@@ -263,4 +281,4 @@ Em 2026-10-13:
 
 ## 14. Instrução para um novo chat
 
-Comece lendo este arquivo integralmente. Pergunte pelo resumo do lote-piloto apenas se ele ainda não estiver disponível no contexto. Antes de propor qualquer comando, verifique se o lote está ativo e se os artefatos citados existem. Continue do item **12 — Próxima etapa exata**. Um comando por vez, aguarde a saída, mantenha análise estática, preserve tudo, cubra o MuServer inteiro e atualize este documento no GitHub depois de cada resultado confirmado.
+Comece lendo este arquivo integralmente. O lote-piloto de ConnectServer já tem resultado reportado na seção 8. Antes de propor qualquer comando, verifique se existe processamento ativo e confira os artefatos locais. Continue do item **12 — Próxima etapa exata**. Um comando por vez, aguarde a saída, mantenha análise estática, preserve tudo, cubra o MuServer inteiro e atualize este documento no GitHub depois de cada resultado confirmado.
