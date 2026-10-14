@@ -552,3 +552,14 @@ O usuário forneceu a saída integral dos dois arquivos; hashes confirmados igua
 - `Custom\\CustomCommandDescription.txt` tem 24 linhas. A única linha de exemplo de configuração é comentada: `// 0 "/testando" "Comando teste"`. Portanto, no conteúdo visível não há registro ativo de descrição personalizada; isso não prova se o sistema aceita arquivo vazio ou se há comportamento adicional no executável. O cabeçalho avisa que o texto tem tamanho máximo de 127 caracteres e que o comando não deve existir em `Command.txt` nem em `CustomMove.txt`.
 - `Custom\\CustomNpcCommand.txt` contém quatro registros ativos e um terminador `end`: (índice 0) NPC 601, mapa 00, X=143, Y=145, NpcTalk=1, texto `/quest`; (1) NPC 793, mapa 92, X=188, Y=102, NpcTalk=1, `/control`, comentário Tower Arka War Event; (2) NPC 789, mapa 00, X=121, Y=133, NpcTalk=1, `/zen 20`, comentário Zen; (3) NPC 785, mapa 00, X=143, Y=145, NpcTalk=1, `/enterarena`, comentário Zen. Interpretação limitada à estrutura declarada; ainda não sabemos como o servidor resolve ou executa esses textos.
 - Próxima verificação estática: pesquisar `/quest`, `/control`, `/zen`, `/enterarena` e `/testando` em `Command.txt` e `CustomMove.txt` dentro da Data principal, sem percorrer cópias secundárias; também registrar tamanho/hash de `CustomMove.txt` e mostrar apenas linhas correspondentes e contexto imediato.
+
+
+## 32. DATA-05 — cruzamento de comandos de NPC com Command.txt (2026-10-14)
+
+Saída fornecida pelo usuário, limitada à Data principal:
+
+- `Data\\Command.txt` manteve 17.350 bytes e SHA-256 `526F26427A36899AC0DA1FED935DEDB9669AFEE6BD8EFE79D320B2CCDC32AC5F`.
+- Correspondências encontradas: linha 33, índice 8 `/zen` (flags AL0–AL3 `1,0,0,0`, comentário `//zen <value> - Add zen`); linha 73, índice 48 `/quest` (flags `1,1,1,1`, comentário `//quest - Quest Command`); linha 123, índice 97 `/enterarena` (flags `2,1,1,1`, comentário `//enterarena - Enter in custom arena event`).
+- Nenhuma correspondência para `/control` ou `/testando` apareceu na busca fornecida em `Command.txt`.
+- `Data\\CustomMove.txt` na raiz da Data não existe no caminho exato testado. Isso não comprova ausência de arquivo com nome semelhante em subpastas ou variação de nome/extensão. Próximo passo: listar apenas arquivos da Data principal cujo nome contenha `Move` (ignorando SpeedServer e SubSalatest) para identificar o arquivo correto antes de qualquer novo cruzamento.
+- Não foi feita alteração em arquivos de configuração. Os registros de NPC continuam sendo evidência de configuração estática, não de execução comprovada.
