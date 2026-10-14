@@ -491,3 +491,14 @@ Resultados fornecidos pelo usuário a partir de leitura local somente leitura do
 - O cabeçalho descreve campos por categoria `AL0`–`AL3`, dinheiro, níveis, resets, delay, GameMaster e moedas. A amostra mostra diferenças de valores entre comandos; para `/evo` e `/reset`, os quatro valores de habilitação exibidos são zero; para `/zen`, esses quatro valores também são zero, embora outros campos da linha sejam distintos. Isso é uma leitura dos valores da configuração, não confirmação de comportamento em execução.
 - A busca recursiva por nome exato `Command.dat` dentro da pasta principal `Data` não encontrou arquivo correspondente. Isso não determina se o arquivo está ausente em todo o pacote, se é procurado fora de `Data`, ou se o comentário do TXT está desatualizado.
 - Próxima verificação: contar as entradas identificadas, resumir nomes e valores de habilitação sem imprimir o arquivo completo, e procurar referências textuais a `Command.dat` somente dentro da pasta principal `Data`. Não modificar configuração nem executar binários.
+
+
+## 26. DATA-05 — catálogo de comandos e busca por Command.dat (2026-10-14)
+
+Resultado fornecido pelo usuário a partir da leitura estática de `Data\\Command.txt` e busca textual em arquivos `.txt`/`.lua` dentro da pasta principal `Data`:
+
+- A expressão usada para reconhecer linhas numeradas com nome entre aspas retornou 103 linhas, com índices aparentes de 0 a 102.
+- A saída colada pelo usuário contém repetição aparente do índice 95 e do comando `/setbuff`; isso deve ser validado diretamente no arquivo antes de afirmar que a duplicação existe no conteúdo original.
+- A lista inclui comandos de movimentação, chat, atributos, reset, administração, economia, eventos, grupos/parties, lojas offline e outras funções, conforme nomes observados. Essa classificação é indicativa pelos nomes, não confirmação de comportamento interno.
+- Busca por `Command.dat` nos arquivos `.txt`/`.lua` da pasta principal `Data` retornou somente o comentário da linha 19 de `Command.txt`: `// Obs: Others configurations see Command.dat`. Não foram encontradas outras referências textuais no conjunto pesquisado. Isso não prova que o arquivo inexista fora da pasta Data ou que não seja acessado de modo indireto.
+- Próximo passo: verificar diretamente no arquivo os índices/nomes duplicados e gerar um resumo compacto de campos de habilitação para cada comando, sem imprimir a tabela inteira. Continuar em modo somente leitura, sem executar o servidor e sem analisar cópias secundárias.
