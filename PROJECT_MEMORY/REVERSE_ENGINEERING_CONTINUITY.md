@@ -349,3 +349,23 @@ Comece lendo este arquivo integralmente. O lote-piloto de ConnectServer já tem 
 - A reconciliação por endereço do lote de 59 está concluída; a revisão semântica e a auditoria de pareamento/contagem de cobertura do inventário não estão concluídas.
 - Não reexecutar os 57 sucessos e não apagar nem sobrescrever os artefatos anteriores.
 - Próximo passo imediato: executar uma verificação compacta de pareamento dos 133 nomes `FUN_<hex>` (um `.c.txt` e um `.json.txt` por nome) e resumir divergências, se houver. Depois, registrar o fechamento da etapa ConnectServer e iniciar DATA-01 com inventário somente de leitura dos diretórios `Data` do MuServer, sem alterar arquivos originais.
+
+## 18. Fechamento da cobertura estrutural dos artefatos FUN_ de ConnectServer (2026-10-14)
+
+Resultado confirmado pelo usuário via PowerShell local, com leitura apenas do diretório `D:\\REA\\pacote_muserver\\ConnectServer\\funcoes`:
+- Arquivos correspondentes ao padrão auditado: 266.
+- Nomes únicos `FUN_<hex>`: 133.
+- Pares completos (exatamente um `.c.txt` e um `.json.txt` por nome): 133.
+- Nomes sem pseudocódigo: 0.
+- Nomes sem metadados: 0.
+- Pares com arquivos duplicados: 0.
+
+Isso encerra a verificação estrutural de pareamento dos 133 artefatos FUN_ e, junto da reconciliação anterior, confirma que os 59 endereços do lote foram encontrados no inventário. Não demonstra que toda função interna do executável foi descompilada, nem que os pseudocódigos foram semanticamente revisados. Os 57 resultados normalizados são símbolos do lote por endereço e não devem ser somados automaticamente aos 133 pares FUN_ como se fossem conjuntos disjuntos.
+
+### Encerramento da etapa ConnectServer — escopo preciso
+- Concluído: inventário de 332 registros interpretado corretamente; 133 pares FUN_ estruturalmente íntegros; 59/59 endereços do lote reconciliados; 57 saídas brutas validadas e normalizadas em diretório separado; duas observações de `cleanup_incomplete` preservadas e documentadas como casos especiais/suspeitos.
+- Continua pendente: revisão semântica, triagem definitiva dos símbolos não FUN_, confirmação da qualidade de pseudocódigo de cada função e análise funcional integrada do ConnectServer.
+- Preservação: não reexecutar sucessos, não sobrescrever artefatos anteriores, não apagar caches temporários do Ghidra manualmente e manter o binário original imutável.
+
+### Próxima etapa autorizada: DATA-01 — inventário somente de leitura
+Iniciar inventário dos diretórios chamados `Data` dentro de `D:\\Muserver-GitHub\\MuServer - Copia`, registrando caminhos, extensões, tamanhos e hashes em saída versionada nova sob `D:\\REA\\pacote_muserver\\DATA\\inventario`. Não alterar, renomear, mover ou apagar arquivos do MuServer. Primeiro localizar as pastas `Data` e contar arquivos; só então ampliar para hashing/inventário detalhado. Registrar a data da execução e a raiz examinada, e preservar qualquer relatório preexistente.
