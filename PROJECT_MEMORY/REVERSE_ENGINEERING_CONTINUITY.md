@@ -524,3 +524,13 @@ Resultado fornecido pelo usuário a partir da inspeção local de `Data\\Command
 - A extração dos quatro primeiros números após o nome mostra padrões `1,1,1,1`, `0,0,0,0`, `2,1,1,1` e `0,1,1,1` em entradas diferentes. O cabeçalho rotula os campos de habilitação por categorias `AL0`–`AL3`; não inferir ainda o efeito operacional do valor 2 ou o comportamento em runtime.
 - Exemplos visíveis: `/move` e `/post` começam com `1,1,1,1`; `/evo`, `/reset` e `/mreset` com `0,0,0,0`; `/make` e `/setbuff` com `2,1,1,1`; `/maketarget` com `0,1,1,1`.
 - Próximo passo: calcular distribuição desses quatro valores e localizar os demais arquivos de configuração de comandos somente dentro da pasta principal `Data`, sem analisar cópias secundárias ou editar arquivos.
+
+
+## 29. DATA-05 — distribuição de flags e arquivos complementares de comandos (2026-10-14)
+
+Resultado fornecido pelo usuário após leitura somente leitura de `Data\\Command.txt` e enumeração de nomes contendo `Command` exclusivamente sob a pasta principal `Data`:
+
+- Distribuição dos quatro primeiros campos numéricos após índice/nome, interpretados provisoriamente como flags AL0–AL3 conforme o cabeçalho: `0,0,0,0`: 13 entradas; `0,1,1,1`: 1; `1,0,0,0`: 1; `1,1,1,1`: 40; `2,1,1,1`: 49. Total 104 entradas reconhecidas, incluindo a duplicata de `/setbuff`.
+- Não concluir ainda o significado operacional do valor 2; o campo separado `GameMaster` também está presente no cabeçalho e precisa ser analisado separadamente.
+- Arquivos com nome contendo `Command` encontrados na pasta principal Data: `Command.txt` (17.350 bytes), `Custom\\CustomCommandDescription.txt` (1.633 bytes) e `Custom\\CustomNpcCommand.txt` (863 bytes). A busca anterior por `Command.dat` encontrou apenas a menção no comentário de `Command.txt`; nenhum arquivo exato `Command.dat` foi localizado dentro da Data principal.
+- Próximo passo: ler os cabeçalhos e amostras limitadas de `CustomCommandDescription.txt` e `CustomNpcCommand.txt`, registrando seus hashes, sem modificar arquivos nem analisar cópias secundárias.
