@@ -314,3 +314,15 @@ Comece lendo este arquivo integralmente. O lote-piloto de ConnectServer já tem 
 4. Atualizar os relatórios locais de cobertura e só depois prosseguir à fila global (GameServer, ConnectServer_old, DataServer, JoinServer e demais binários), mantendo análise estática e hash do original.
 
 **Estado do GitHub antes desta atualização:** o arquivo mestre estava no blob SHA `d5d95daf862a424492237d425b1f1c3d4ef9c3c5`, cujo texto ainda descrevia o lote-piloto antigo. Esta seção registra os resultados posteriores fornecidos em 2026-10-14; o SHA do commit que grava esta atualização deve ser o retornado pela operação GitHub.
+
+## 16. Recuperação parcial de falhas de limpeza do Ghidra (2026-10-14)
+
+- Lote de origem: `ConnectServer/diagnostico/cobertura_20261014/lote_simbolos_internos_20261014_183049`.
+- As duas entradas com código de saída 1 não falharam na produção inicial de pseudocódigo; o erro registrado é `data.code=cleanup_incomplete`, em `close_binary`, após a observação parcial.
+- Diagnóstico: o Ghidra 12.1.4 não conseguiu remover seus diretórios privados temporários porque arquivos de cache `db.1.gbf` estavam em uso (Win32 32). `stderr` estava vazio; o JSON de stdout contém `data.details.partial_observation`.
+- `___tmainCRTStartup`, endereço `0x406b5d`: pseudocódigo extraído para a pasta local `diagnostico/cobertura_20261014/recuperacao_parcial_cleanup_incomplete_20261014`; 2.761 caracteres. É função de runtime Visual C++ 2010, não deve contar automaticamente como lógica própria do ConnectServer.
+- `MSVCR100.DLL::type_info::_type_info_dtor_internal_method`, endereço `0x40726a`: pseudocódigo extraído para a mesma pasta; 306 caracteres. Contém aviso de recuperação de jumptable e salto indireto tratado como chamada; manter como resultado suspeito/não validado, não afirmar que a semântica do destrutor foi recuperada.
+- As duas observações reportam o SHA-256 do executável ConnectServer.exe como `f25eecb6c65214b7658fc2a8a1b0c786bbb1b718a78405a8e4c61d88c9477aed`. Isso foi conferido nos metadados das observações; a verificação local independente posterior do arquivo continua recomendada.
+- Os artefatos locais originais e a extração de recuperação não foram enviados ao GitHub; esta atualização registra somente a continuidade.
+- Não repetir as duas análises antes de verificar estado dos processos/arquivos temporários do Ghidra. Não apagar manualmente diretórios temporários retidos. Próxima etapa: verificar integridade da recuperação e do executável; depois validar/normalizar as 57 saídas brutas aprovadas em pasta versionada nova, sem sobrescrever originais, e reconciliar cobertura contra inventário.
+
