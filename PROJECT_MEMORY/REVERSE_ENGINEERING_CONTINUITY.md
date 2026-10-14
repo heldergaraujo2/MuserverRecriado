@@ -597,3 +597,33 @@ Busca textual fornecida pelo usuário, restrita à Data principal e às extensõ
 - `Message/Message_spn.txt`, linha 339, ID 508: `[Arka War] Utilice el comando /control en la coordenada 189 101!`; linha 915, ID 1527: `[Arka War] Controla la torre usa el comando /control`.
 
 Interpretação: `/control` está referenciado no contexto textual do evento Arka War em três idiomas e associado a um NPC em mapa 92. A divergência aparente entre coordenadas NPC (188,102) e mensagem (189,101) pode ser proximidade/posição de interação; não declarar erro sem compreender a lógica de distância. Próximo passo: inspecionar cabeçalho e conteúdo integral de `Custom/CustomNpcQuest.txt` e metadados/hashes dos três arquivos Message citados; focar em comentários e estrutura, sem modificar arquivos nem inferir runtime.
+
+
+## 36. DATA-06 — leitura estrutural de CustomNpcQuest.txt (2026-10-14)
+
+Fonte: saída fornecida pelo usuário, pasta principal `D:\\Muserver-GitHub\\MuServer - Copia\\Data`. Nenhum arquivo local foi alterado.
+
+### Integridade dos arquivos
+- `Custom/CustomNpcQuest.txt`: 19.185 bytes; SHA-256 `67B4DACC4C3CFE19104A9BA001DBCC03BE0CF4C941093942BB7FAA63E91FCBC2`.
+- `Message/Message_eng.txt`: 91.845 bytes; SHA-256 `388292A964FCD24E985C0D9BFEE3FADB287C244564D56DC9C7554C469D8A80D7`.
+- `Message/Message_por.txt`: 53.630 bytes; SHA-256 `B69C257FEA633D25C74BD53F08F850540052F36EAFDD27908582461C8F57F5F2`.
+- `Message/Message_spn.txt`: 55.310 bytes; SHA-256 `368F813892E7D0540999515BB22EE0E875FFA77FD6FFD3EF35D3250DAA4EB682`.
+
+### Estrutura documentada pelo arquivo
+O arquivo organiza sete seções numeradas:
+- Seção 0: configuração geral/locais de quest. O cabeçalho define `MaxQuest` como limite de quests realizadas (0 = ilimitado) e `OpenNpc` como abertura do NPC normal (loja, CustomNpcMove, CustomNpcCommand etc.; 0 desabilita, 1 habilita). Registros não comentados para quests 1–4 usam NPC 600: quest 1 no mapa 02, (220,77), OpenNpc=1; quest 2 no mapa 10, (10,17), OpenNpc=1; quest 3 no mapa 38, (78,108), OpenNpc=1; quest 4 no mapa 80, (119,122), OpenNpc=0. Quest 5 em mapa 85 está comentada.
+- Seção 1: requisitos de personagem. Linhas não comentadas para quests 1–4 definem níveis 50, 100, 150 e 350, respectivamente; resets/Grand Resets e outros requisitos usam `*` ou zero, conforme as colunas. O cabeçalho identifica Level, Reset, MReset, Zen, WC, WP, GP, VipLvl, RankUser e Kills.
+- Seção 2: requisitos de item. O único exemplo visível está comentado; portanto não há linha ativa de item exigido evidente no texto fornecido.
+- Seção 3: requisito de abate. Quests 1–4 exigem cinco monstros cada, IDs 684, 839, 830 e 869, respectivamente. A quest 5 está comentada.
+- Seção 4: recompensa de moedas. Quests 1–4 declaram WC=0, HP=0, GP=100.
+- Seção 5: recompensas de item. Há várias linhas não comentadas para quests 1–4 com seção 14, tipo 54 e comentário “chaos card tier 1”; existem múltiplas entradas repetidas por quest. Também há entradas não comentadas para quest 5, seção 14, tipo 92, embora o registro de localização da quest 5 esteja comentado na seção 0. Tratar isso como possível configuração órfã/inconsistência a investigar, não como erro confirmado. A multiplicidade pode representar várias recompensas ou duplicação acidental; o parser/runtime ainda não foi verificado.
+- Seção 6: todos os exemplos de buff visíveis estão comentados; não há configuração ativa evidente.
+- Seção 7: seção de experiência, pontos, dinheiro e Battle Pass, sem registros ativos visíveis antes de `end`.
+
+### Interpretação e limites
+A configuração sugere um fluxo de quests por NPC com requisitos de nível, abate de um tipo de monstro, recompensa GP e itens. Isso é uma leitura estrutural dos comentários e registros; ainda não prova como o servidor carrega os blocos, como interpreta valores `*`/zero, nem como distribui as múltiplas recompensas. A variável inicial `0` e os cabeçalhos numerados parecem atuar como marcadores do formato, mas sua gramática deve ser confirmada no código consumidor.
+
+### Próxima investigação
+1. Examinar outros arquivos de configuração que definem NPCs/quests e os registros de monstros/item IDs relevantes, sem executar binários.
+2. Pesquisar no código decompilado ou em símbolos estáticos do executável referências ao nome `CustomNpcQuest.txt` e às seções numeradas, para identificar o consumidor e validar a gramática.
+3. Manter as mensagens de Arka War e o NPC `/control` como uma trilha separada: são evidências relacionadas ao evento, não prova de implementação da quest customizada.
