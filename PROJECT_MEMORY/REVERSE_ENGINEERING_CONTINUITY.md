@@ -658,3 +658,32 @@ Fonte: saída de PowerShell fornecida pelo usuário, REA 6.4.0 / Ghidra 12.1.4. 
 
 ### Interpretação e próximo passo
 Tratar como resultado negativo limitado à cobertura atual de strings definidas e nomes de procedimentos. Antes de tentar associar endereços a lógica de quest, examinar o relatório geral/estrutura do executável e as capacidades do provedor; verificar se a análise de strings cobre áreas relevantes e se o binário tem seções empacotadas/obfuscadas. Depois, escolher sondagens estáticas suportadas pelo REA. Não afirmar que quests estão ausentes, nem fazer alterações no binário.
+
+
+## 39. GS-DATA-02 — fluxo de saltos do entry e falha na execução da busca de strings (2026-10-15)
+
+Fonte: saídas de PowerShell fornecidas pelo usuário. Alvo estático: `D:\\Muserver-GitHub\\MuServer - Copia\\GameServer\\GameServer.exe`, SHA-256 previamente observado `acc5cf86001af2dd93c5bfc2d8f6b11aa2e665a4f7456732a0f02c79d584a461`. Nenhum binário foi executado ou alterado.
+
+### Evidência observada
+
+- `entry` em `0x2c576f9`: 251 bytes reconhecidos, sem strings referenciadas, 0 chamadores reconhecidos e 2 chamadas listadas. O Ghidra informa fluxo terminal para `FUN_02dd1fb6` em `0x2dd1fb6` e para `FUN_02f1f4ad` em `0x2f1f4ad`; as limitações não estabelecem a razão desse fluxo terminal.
+- `FUN_02dd1fb6` em `0x2dd1fb6`: 10 bytes reconhecidos; o relatório indica chamada/fluxo terminal para `FUN_02c576ff` em `0x2c576ff`.
+- `FUN_02c576ff` em `0x2c576ff`: pseudocódigo `FUN_02deb620(); return;`; assembly observado: `POP EBP`, seguido de `JMP 0x02deb620`.
+- `FUN_02deb620` em `0x2deb620`: 11 bytes reconhecidos; assembly observado `SUB EBP, 0x6cffbb`, seguido de `JMP 0x02dd1fc0`. Não inferir semântica apenas dessas instruções.
+- Inspeção de instrução em `0x2dd1fc0`: bytes `e8a7070f00`, instrução `CALL 0x02ec276c`, destino direto confirmado pelo fluxo e pela referência do Ghidra.
+- `FUN_02ec276c` em `0x2ec276c`: 5 bytes reconhecidos; assembly `JMP 0x02dd1fa2`; sem strings referenciadas. Pseudocódigo exibido como chamada para `FUN_02e5aca9` e retorno, mas o assembly reportado é um salto; preservar essa diferença e não tratar o pseudocódigo como semântica definitiva.
+- Tentativa anterior de analisar `0x2deb620` falhou inicialmente por caminho incorreto (`...`GameServer.exe` na raiz); foi corrigida para `...\\GameServer\\GameServer.exe` e a função foi reconhecida.
+- Uma consulta `rea xrefs <exe> 0x2c576f9` retornou apenas o texto `"0x400150"`; o formato/semântica desse valor não foi estabelecido. Não interpretá-lo como grafo de referências.
+- A última tentativa de executar um lote de buscas por `CustomNpcQuest.txt`, `CustomNpcCommand.txt`, `CustomNpcQuest`, `CustomNpcCommand`, `luaL_loadfilex`, `CreateFileA` e `fopen` não foi executada: o PowerShell rejeitou a sintaxe `foreach (...) { ... } | Format-Table` com erro de elemento pipe vazio. Portanto, **não há resultados dessas sete buscas ainda**. Os arquivos de saída podem não existir ou estar desatualizados; não os tratar como evidência de busca concluída.
+
+### Interpretação prudente
+
+O pequeno conjunto de procedimentos e os saltos encadeados não revelam ainda o consumidor de `CustomNpcQuest.txt` nem de `CustomNpcCommand.txt`. A cobertura de strings/procedimentos continua limitada; resultados vazios não provam ausência da lógica. A investigação deve sair da perseguição de trampolins isolados e voltar à identificação estática de strings/referências e ao consumidor das configurações.
+
+### Próxima ação exata
+
+1. Reexecutar as buscas de strings de forma válida no PowerShell: acumular os objetos de resumo em uma variável/array e aplicar `Format-Table` **depois** do loop, em vez de colocar o pipe diretamente após o bloco `foreach`.
+2. Salvar um JSON separado por termo sob `D:\\REA\\analise_GameServer\\busca_configuracoes`, no executável principal correto, sem sobrescrever binários nem resultados de decompilação anteriores.
+3. Interpretar cada resultado conforme a estrutura JSON realmente retornada; registrar correspondências e limitações. Se os nomes dos arquivos não forem encontrados, seguir com buscas por referências e funções de carregamento de arquivos, sem concluir que as configurações não são usadas.
+4. Atualizar esta continuidade após os resultados efetivamente observados.
+
